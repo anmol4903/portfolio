@@ -3,7 +3,9 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" type="image/png" href="favicon2.png">
 <title>ANMOL | Premium Web Designer &amp; Developer</title>
+<body id="top" class="font-body-md overflow-x-hidden"></body>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500&amp;family=Geist:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -103,7 +105,7 @@
         body {
             background-color: #090909;
             color: #e3e2e7;
-            cursor: none;
+            /*cursor: none; */
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
@@ -125,7 +127,7 @@
             box-shadow: 0 0 40px -10px rgba(20, 156, 203, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.02);
         }
 
-        /* Custom Cursor */
+        /* Custom Cursor 
         .custom-cursor {
             width: 8px;
             height: 8px;
@@ -134,8 +136,8 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.1s ease;
-        }
+            transition: transform 0.1s ease;   
+        }*/
         .cursor-follower {
             width: 40px;
             height: 40px;
@@ -190,22 +192,26 @@
             overflow: hidden;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
-        .glowing-button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
-            opacity: 0;
-        }
-        .glowing-button:hover::after {
-            left: 100%;
-            opacity: 1;
-        }
+        .glowing-button::after{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-150%;
+    width:60%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.15),
+        transparent
+    );
+    transform:skewX(-25deg);
+    transition:left .6s ease;
+}
+
+.glowing-button:hover::after{
+    left:160%;
+}
         .glowing-button:hover {
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 10px 25px -5px rgba(20, 156, 203, 0.4);
@@ -252,6 +258,60 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Mobile Nav Drawer */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: min(80vw, 320px);
+            height: 100dvh;
+            background: rgba(9,9,9,0.97);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-left: 1px solid rgba(255,255,255,0.06);
+            z-index: 100;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 5rem 2rem 2rem;
+            gap: 0.5rem;
+        }
+        #mobile-menu.open {
+            right: 0;
+        }
+        #mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #mobile-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        #mobile-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+        }
+
+        /* Fix hero image overflow on mobile */
+        @media (max-width: 767px) {
+            .hero-image-wrapper {
+                max-width: 320px;
+                margin: 0 auto;
+            }
+            /* Prevent floating card from going off screen */
+            .hero-badge {
+                bottom: -1.5rem !important;
+                right: -0.5rem !important;
+                max-width: calc(100% - 1rem);
+            }
+        }
+
         /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             .reveal, .stagger-load, .floating, .glowing-button, .glass-panel {
@@ -263,59 +323,101 @@
             .custom-cursor, .cursor-follower, .scroll-progress {
                 display: none;
             }
+
+            .glowing-button{
+    display:inline-flex;
+}
         }
     </style>
 </head>
 <body class="font-body-md overflow-x-hidden">
 <canvas id="particles-canvas"></canvas>
-<div class="custom-cursor" id="cursor"></div>
-<div class="cursor-follower" id="follower"></div>
+<!--<div class="custom-cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div> -->
 <div class="scroll-progress" id="progress"></div>
 <!-- Navigation -->
-<nav class="fixed top-0 w-full bg-background/70 backdrop-blur-[30px] border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop py-6 max-w-container-max mx-auto z-[60]">
-<div class="font-display-xl text-headline-md tracking-tighter text-on-surface">AESTHETE</div>
+<nav class="fixed top-0 left-0 right-0 w-full bg-background/70 backdrop-blur-[30px] border-b border-outline-variant/10 flex justify-between items-center px-6 md:px-margin-desktop py-5 z-[60]">
+<a href="#top" class="flex items-center gap-3 group">
+    <img src="favicon2.png" alt="AS Logo" class="w-8 h-8">
+    <span class="font-display-xl text-headline-md tracking-tighter text-on-surface">
+        ANMOL
+    </span>
+</a>
 <div class="hidden md:flex gap-12 items-center">
 <a class="font-label-sm text-label-sm text-primary relative after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-primary after:rounded-full hover:text-primary transition-colors duration-300" href="#work">Work</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300" href="#about">About</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300" href="#services">Services</a>
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300" href="#contact">Contact</a>
-<button class="px-6 py-2 border border-outline-variant/30 font-label-sm text-label-sm hover:border-primary transition-all duration-300 scale-95 active:scale-90 rounded-full">Let's Talk</button>
+<a href="#cta" class="px-6 py-2 border border-outline-variant/30 font-label-sm text-label-sm hover:border-primary transition-all duration-300 scale-95 active:scale-90 rounded-full">Let's Talk</a>
 </div>
-<button class="md:hidden text-on-surface">
+<button id="hamburger-btn" class="md:hidden text-on-surface p-1 rounded-lg hover:bg-surface-variant/30 transition-colors" aria-label="Open menu">
 <span class="material-symbols-outlined">menu</span>
 </button>
 </nav>
+
+<!-- Mobile Nav Overlay -->
+<div id="mobile-overlay"></div>
+
+<!-- Mobile Nav Drawer -->
+<div id="mobile-menu" role="dialog" aria-label="Navigation menu">
+    <button id="mobile-close" class="text-on-surface-variant hover:text-on-surface transition-colors p-1" aria-label="Close menu">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="mb-6 pb-6 border-b border-outline-variant/20">
+        <span class="font-display-xl text-headline-md tracking-tighter text-on-surface">ANMOL</span>
+        <div class="text-xs text-on-surface-variant/50 uppercase tracking-widest mt-1">Web Designer & Developer</div>
+    </div>
+    <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 py-4 border-b border-outline-variant/10 flex items-center gap-3" href="#work">
+        <span class="material-symbols-outlined text-secondary text-base">work</span> Work
+    </a>
+    <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 py-4 border-b border-outline-variant/10 flex items-center gap-3" href="#about">
+        <span class="material-symbols-outlined text-secondary text-base">person</span> About
+    </a>
+    <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 py-4 border-b border-outline-variant/10 flex items-center gap-3" href="#services">
+        <span class="material-symbols-outlined text-secondary text-base">design_services</span> Services
+    </a>
+    <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-300 py-4 border-b border-outline-variant/10 flex items-center gap-3" href="#contact">
+        <span class="material-symbols-outlined text-secondary text-base">mail</span> Contact
+    </a>
+    <div class="mt-auto pt-6">
+        <a href="#cta" class="glowing-button w-full text-center px-6 py-4 bg-on-surface text-background font-bold font-label-sm text-label-sm rounded-full block">
+            Let's Talk
+        </a>
+    </div>
+</div>
 <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative">
 <!-- Hero Section -->
-<section class="min-h-screen flex flex-col md:flex-row items-center pt-32 pb-section-gap relative">
+<section class="min-h-screen flex flex-col md:flex-row items-center pt-28 md:pt-32 pb-16 md:pb-section-gap relative">
 <div id="hero-gradient"></div>
-<div class="w-full md:w-1/2 z-10">
-<h1 class="font-display-xl text-display-xl-mobile md:text-display-xl mb-8 tracking-tighter stagger-load" style="animation-delay: 0.1s">
-                    I Build Websites That Make <span class="text-secondary italic">Businesses</span> Look Premium.
+<div class="w-full md:w-1/2 z-10 text-center md:text-left">
+<h1 class="font-display-xl text-display-xl-mobile md:text-display-xl mb-6 md:mb-8 tracking-tighter stagger-load" style="animation-delay: 0.1s">
+                    I Build Modern Websites That Turn <span class="text-secondary italic"> Visitors  </span><br> into <span class="text-secondary italic">Customers. </span>
                 </h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[50ch] mb-12 stagger-load" style="animation-delay: 0.3s">
-                    I help businesses stand out online with modern websites and landing pages that build trust and generate more customers.
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[50ch] mb-10 md:mb-12 stagger-load mx-auto md:mx-0" style="animation-delay: 0.3s">
+                    Hi! There I'm Anmol I help businesses to stand out online with modern websites and landing pages that build trust and generate more customers.
                 </p>
-<div class="flex flex-col sm:flex-row gap-6 stagger-load" style="animation-delay: 0.5s">
-<button class="glowing-button px-10 py-5 bg-primary-container text-on-surface font-label-sm text-label-sm rounded-lg flex items-center justify-center gap-2 border border-outline-variant/20">
+<div class="flex flex-col sm:flex-row gap-4 md:gap-6 stagger-load" style="animation-delay: 0.5s">
+<a href="#work" class="glowing-button px-8 py-4 md:px-10 md:py-5 bg-primary-container text-on-surface font-label-sm text-label-sm rounded-lg flex items-center justify-center gap-2 border border-outline-variant/20">
                         View My Work
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</button>
-<button class="px-10 py-5 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm rounded-lg hover:text-on-surface hover:border-primary/50 transition-all duration-300">
-                        Book a Free Consultation
-                    </button>
+</a>
+
+<a href="https://wa.me/+919453633094" class="px-8 py-4 md:px-10 md:py-5 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm rounded-lg hover:text-on-surface hover:border-primary/50 transition-all duration-300 text-center">
+  Book a Free Consultation
+</a>
+
 </div>
 </div>
-<div class="w-full md:w-1/2 mt-16 md:mt-0 flex justify-center items-center z-10 stagger-load" style="animation-delay: 0.7s">
-<div class="relative w-full max-w-lg aspect-square floating">
+<div class="w-full md:w-1/2 mt-12 md:mt-0 flex justify-center items-center z-10 stagger-load" style="animation-delay: 0.7s">
+<div class="hero-image-wrapper relative w-full max-w-[320px] md:max-w-lg aspect-square floating">
 <div class="absolute inset-0 glass-panel rounded-3xl transform -rotate-6"></div>
-<img class="absolute inset-4 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" src="https://lh3.googleusercontent.com/aida/AP1WRLvqfDhRnBF3sB2tehHIUtPorp7I72KVt0bp9ASpW1lPrMGuulosan9QQCF47KAijJ_jG_TWuq2tF1M0qE5D4HutKpmiQCLrR6gwS1bhLgKww0stFqji88gxh0PfZKIf6GXnCn1BdW_RtHDP2hJtktEcw9uXETUaAZ_OjkBFqGTxo_DyzqKw3fqoG23t61MIISvlFI2jIyD2yEusMMFofcMOGyGRuz2mvC4Lgei3WQgvjQlkf2ZO2cC44DKC"/>
-<div class="absolute -bottom-8 -right-8 glass-panel p-6 rounded-2xl flex items-center gap-4">
-<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center">
+<img class="absolute inset-4 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" src="me2.jpg"/>
+<div class="hero-badge absolute -bottom-6 md:-bottom-8 -right-2 md:-right-8 glass-panel p-4 md:p-6 rounded-2xl flex items-center gap-3 md:gap-4">
+<div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
 <span class="material-symbols-outlined text-secondary text-glow">verified</span>
 </div>
 <div>
-<div class="text-on-surface font-bold">Modern Websites That Turn </div>
+<div class="text-on-surface font-bold text-sm md:text-base leading-snug">Modern Websites That Turn </div>
 <div class="text-on-surface-variant text-xs">Visitors Into Customers</div>
 </div>
 </div>
@@ -323,8 +425,8 @@
 </div>
 </section>
 <!-- About Section -->
-<section class="py-section-gap" id="about">
-<div class="flex flex-col md:flex-row gap-20">
+<section class="py-16 md:py-section-gap" id="about">
+<div class="flex flex-col md:flex-row gap-12 md:gap-20">
 <div class="w-full md:w-1/3 reveal">
 <h2 class="font-headline-lg text-headline-lg mb-6">Not Just Another Developer.</h2>
 <p class="font-body-md text-on-surface-variant mb-8">
@@ -332,7 +434,7 @@
                     </p>
 <div class="w-24 h-1 bg-secondary rounded-full"></div>
 </div>
-<div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+<div class="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
 <div class="glass-panel p-8 rounded-2xl reveal hover-tilt">
 <span class="material-symbols-outlined text-secondary text-4xl mb-6">brush</span>
 <h3 class="font-headline-md text-headline-md mb-2">Modern UI/UX</h3>
@@ -340,29 +442,29 @@
 </div>
 <div class="glass-panel p-8 rounded-2xl reveal hover-tilt" style="transition-delay: 0.1s">
 <span class="material-symbols-outlined text-secondary text-4xl mb-6">devices</span>
-<h3 class="font-headline-md text-headline-md mb-2">Mobile Responsive</h3>
+<h3 class="font-headline-md text-headline-md mb-2">Fully Responsive</h3>
 <p class="text-on-surface-variant">Flawless performance across all devices, from massive displays to handheld screens.</p>
 </div>
 <div class="glass-panel p-8 rounded-2xl reveal hover-tilt" style="transition-delay: 0.2s">
 <span class="material-symbols-outlined text-secondary text-4xl mb-6">bolt</span>
-<h3 class="font-headline-md text-headline-md mb-2">Fast Performance</h3>
+<h3 class="font-headline-md text-headline-md mb-2"> Performance</h3>
 <p class="text-on-surface-variant">Optimized assets and clean architecture ensuring sub-second load times.</p>
 </div>
 <div class="glass-panel p-8 rounded-2xl reveal hover-tilt" style="transition-delay: 0.3s">
 <span class="material-symbols-outlined text-secondary text-4xl mb-6">search</span>
-<h3 class="font-headline-md text-headline-md mb-2">SEO Ready</h3>
+<h3 class="font-headline-md text-headline-md mb-2">SEO Friendly</h3>
 <p class="text-on-surface-variant">Built-in visibility strategies to ensure your business ranks where it belongs.</p>
 </div>
 </div>
 </div>
 </section>
 <!-- Services Section -->
-<section class="py-section-gap" id="services">
-<div class="text-center mb-24 reveal">
+<section class="py-16 md:py-section-gap" id="services">
+<div class="text-center mb-16 md:mb-24 reveal">
 <h2 class="font-headline-lg text-headline-lg mb-4">Core Services</h2>
 <p class="text-on-surface-variant">Tailored solutions for high-impact digital presence.</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 reveal">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 reveal">
 <div class="glass-panel p-10 rounded-3xl h-full flex flex-col justify-between group hover-tilt">
 <div>
 <div class="text-secondary text-xs font-label-sm mb-12 opacity-50 group-hover:opacity-100 transition-opacity">01</div>
@@ -394,24 +496,35 @@
 </div>
 </section>
 <!-- Portfolio Section -->
-<section class="py-section-gap" id="work">
-<div class="flex justify-between items-end mb-20 reveal">
+<section class="py-16 md:py-section-gap" id="work">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-12 md:mb-20 reveal">
 <div>
-<h2 class="font-headline-lg text-headline-lg mb-4">Selected Work</h2>
-<p class="text-on-surface-variant">A collection of premium digital experiences.</p>
+<h2 class="font-headline-lg text-headline-lg mb-4">Recent Work</h2>
+<p class="text-on-surface-variant">Explore a selection of websites I've designed and developed.</p>
 </div>
-<button class="text-secondary font-label-sm flex items-center gap-2 hover:gap-4 transition-all group">
-                    View All Projects <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">trending_flat</span>
-</button>
+<a href="https://github.com/anmol4903"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="font-label-sm flex items-center gap-2 hover:gap-4 transition-all group flex-shrink-0">
+
+    View All Projects
+    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">
+        trending_flat
+    </span>
+
+</a>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 <!-- Project 1 -->
 <div class="reveal group">
 <div class="relative overflow-hidden rounded-3xl aspect-[4/3] glass-panel mb-8 border-outline-variant/10">
-<img class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/AP1WRLsy6b_4gaJMBm2bLm_dd9h92nxqrWhwtmeVnDnqLPaEO_sWO9OqlaWmUX4qXeWSL-QxfeJ22DhFk0jduyI4CALHCOeuu3kUu0CPONqDjV2QHCQX9gDRsDOHpgGgfLSub6b-Q-OcBvly-3T01DOkIlQqqLhidN2ZuYboV9me4s_9pnZtCF0QAYVOkzUrNv81czd0LuML9-Alhc52QPNBGzBAAUsLR2LMLOx4RYC--g0wZqfVOE5TO5xrjr5r"/>
+<img class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="levate.png"/>
 <div class="absolute inset-0 bg-background/60 backdrop-blur-[4px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
 <div class="text-center transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-<button class="px-8 py-4 bg-on-surface text-background font-bold rounded-full mb-4">View Case Study</button>
+<a href="https://anmol4903.github.io/real-estate/"
+target="_blank">
+View Live Site
+</a>
 <div class="flex gap-2 justify-center">
 <span class="text-[10px] text-white/60 border border-white/20 px-2 py-1 rounded">FIGMA</span>
 <span class="text-[10px] text-white/60 border border-white/20 px-2 py-1 rounded">REACT</span>
@@ -423,33 +536,42 @@
 <span class="text-[10px] uppercase tracking-widest border border-outline-variant px-3 py-1 rounded-full text-on-surface-variant">UI/UX</span>
 <span class="text-[10px] uppercase tracking-widest border border-outline-variant px-3 py-1 rounded-full text-on-surface-variant">Responsive</span>
 </div>
-<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">Lumina Dental Clinic</h4>
+<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">Levate Properties Website</h4>
+<p class="text-on-surface-variant mt-2">
+Designed to present properties with a modern user experience.
+</p>
 </div>
 <!-- Project 2 -->
 <div class="reveal group mt-0 md:mt-24" style="transition-delay: 0.2s">
 <div class="relative overflow-hidden rounded-3xl aspect-[4/3] glass-panel mb-8 border-outline-variant/10">
-<img class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="https://lh3.googleusercontent.com/aida/AP1WRLsts14O19H4ZIrwYO0XVIXTF1AxmY8pvj3PM8mZRR9cf6ADC3Q5SwfzaviGcIiGbxhSdz-6uaxt5zx-eBsyceOxYWzxESGRslgvCa-0Fi0Rrmy_-Le9e1XKJZKurmSulLGU9M7uJBzgKDjZiwoVGFKe1euSLQdXGdOy0sN8mW4zONfopCMHqJcaqDD7jmg4UbRWCFo4qrt-3WilGwFH7CKXj0OloQ7MfahVDSJe-HA1OPX-tkcGSnc1ydlu"/>
+<img class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" src="dental.png"/>
 <div class="absolute inset-0 bg-background/60 backdrop-blur-[4px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
 <div class="text-center transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-<button class="px-8 py-4 bg-on-surface text-background font-bold rounded-full mb-4">View Case Study</button>
+<a href="https://anmol4903.github.io/smile-kart/"
+target="_blank">
+View Live Site
+</a>
 <div class="flex gap-2 justify-center">
 <span class="text-[10px] text-white/60 border border-white/20 px-2 py-1 rounded">BRANDING</span>
-<span class="text-[10px] text-white/60 border border-white/20 px-2 py-1 rounded">E-COM</span>
+<span class="text-[10px] text-white/60 border border-white/20 px-2 py-1 rounded">SEO</span>
 </div>
 </div>
 </div>
 </div>
 <div class="flex gap-3 mb-4">
-<span class="text-[10px] uppercase tracking-widest border border-outline-variant px-3 py-1 rounded-full text-on-surface-variant">E-Commerce</span>
+<span class="text-[10px] uppercase tracking-widest border border-outline-variant px-3 py-1 rounded-full text-on-surface-variant">Landing Page</span>
 <span class="text-[10px] uppercase tracking-widest border border-outline-variant px-3 py-1 rounded-full text-on-surface-variant">SEO</span>
 </div>
-<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">Golden Grain Bakery</h4>
+<h4 class="font-headline-md text-headline-md group-hover:text-secondary transition-colors">SmileKart Dental Website</h4>
+<p class="text-on-surface-variant mt-2">
+Designed to build patient trust and increase consultation bookings.
+</p>
 </div>
 </div>
 </section>
 <!-- Process Section -->
-<section class="py-section-gap">
-<div class="text-center mb-24 reveal">
+<section class="py-16 md:py-section-gap">
+<div class="text-center mb-16 md:mb-24 reveal">
 <h2 class="font-headline-lg text-headline-lg mb-4">The Process</h2>
 <p class="text-on-surface-variant">A streamlined journey from idea to execution.</p>
 </div>
@@ -488,35 +610,39 @@
 </div>
 </section>
 <!-- Why Choose Me -->
-<section class="py-section-gap">
-<div class="reveal glass-panel rounded-[3rem] p-12 md:p-24 flex flex-col md:flex-row gap-20 items-center overflow-hidden relative">
+<section class="py-16 md:py-section-gap">
+<div class="reveal glass-panel rounded-[2rem] md:rounded-[3rem] p-8 md:p-24 flex flex-col md:flex-row gap-12 md:gap-20 items-center overflow-hidden relative">
 <div class="absolute -top-24 -right-24 w-96 h-96 bg-secondary/5 blur-[100px] rounded-full"></div>
-<div class="w-full md:w-1/2 relative z-10">
-<h2 class="font-headline-lg text-headline-lg mb-8 leading-tight">Why Choose Me?</h2>
-<p class="text-on-surface-variant mb-12">I specialize in high-stakes web projects where quality cannot be compromised. I don't just build sites; I build business assets.</p>
-<button class="glowing-button px-10 py-5 rounded-lg font-label-sm bg-secondary text-background font-bold">Get Started Now</button>
+<div class="w-full md:w-1/2 relative z-10 text-center md:text-left">
+<h2 class="font-headline-lg text-headline-lg mb-6 md:mb-8 leading-tight">Why Choose Me?</h2>
+<p class="text-on-surface-variant mb-8 md:mb-12">I help businesses build a strong online
+presence with fast, modern, and professional
+websites that create trust and attract more
+customers.</p>
+<a href="https://wa.me/919453633094?text=Hi%20Anmol,%20I%20saw%20your%20portfolio%20and%20I'm%20interested%20in%20getting%20a%20website%20for%20my%20business"
+target="_blank" class="glowing-button inline-block px-10 py-5 rounded-lg font-label-sm bg-secondary text-background font-bold">Get Started Now</a>
 </div>
-<div class="w-full md:w-1/2 grid grid-cols-2 gap-8 relative z-10">
-<div class="text-center md:text-left">
-<div class="text-5xl font-bold text-secondary mb-2">100%</div>
-<p class="text-on-surface-variant text-sm font-label-sm">Mobile Responsive</p>
+<div class="w-full md:w-1/2 grid grid-cols-2 gap-8 md:gap-8 relative z-10">
+<div class="text-center">
+<div class="text-4xl md:text-5xl font-bold text-secondary mb-2">FULL</div>
+<p class="text-on-surface-variant text-sm font-label-sm">Responsive Design</p>
 </div>
-<div class="text-center md:text-left">
-<div class="text-5xl font-bold text-secondary mb-2">99+</div>
-<p class="text-on-surface-variant text-sm font-label-sm">PageSpeed Score</p>
+<div class="text-center">
+<div class="text-4xl md:text-5xl font-bold text-secondary mb-2">Fast</div>
+<p class="text-on-surface-variant text-sm font-label-sm">Optimized Performance</p>
 </div>
-<div class="text-center md:text-left">
-<div class="text-5xl font-bold text-secondary mb-2">W3C</div>
-<p class="text-on-surface-variant text-sm font-label-sm">Standard Coding</p>
+<div class="text-center">
+<div class="text-4xl md:text-5xl font-bold text-secondary mb-2">WA</div>
+<p class="text-on-surface-variant text-sm font-label-sm">Integration</p>
 </div>
-<div class="text-center md:text-left">
-<div class="text-5xl font-bold text-secondary mb-2">24/7</div>
-<p class="text-on-surface-variant text-sm font-label-sm">Client Support</p>
+<div class="text-center">
+<div class="text-4xl md:text-5xl font-bold text-secondary mb-2">SEO</div>
+<p class="text-on-surface-variant text-sm font-label-sm">Friendly</p>
 </div>
 </div>
 </div>
 </section>
-<!-- Testimonials -->
+<!-- Testimonials --
 <section class="py-section-gap reveal">
 <div class="text-center mb-24">
 <h2 class="font-headline-lg text-headline-lg mb-4">What Clients Say</h2>
@@ -558,28 +684,71 @@
 </div>
 </div>
 </div>
-</section>
+</section> -->
 <!-- Final CTA -->
-<section class="py-section-gap text-center reveal">
-<div class="max-w-4xl mx-auto">
+<section id="cta" class="py-16 md:py-section-gap text-center reveal scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-4">
 <h2 class="font-display-xl text-display-xl-mobile md:text-headline-lg mb-8">Ready to Make Your Business Stand Out?</h2>
-<button class="glowing-button px-12 py-6 bg-on-surface text-background font-bold text-lg rounded-full group">
-                    Let's Build Something Amazing
-                    <span class="material-symbols-outlined inline-block align-middle ml-2 group-hover:translate-x-2 transition-transform">bolt</span>
-</button>
+<a
+href="https://wa.me/919453633094?text=Hi%20Anmol,%20I%20saw%20your%20portfolio%20and%20I'm%20interested%20in%20getting%20a%20website%20for%20my%20business."
+target="_blank"
+class="glowing-button inline-flex items-center justify-center px-8 md:px-12 py-5 md:py-6 bg-on-surface text-background font-bold text-lg rounded-full group"
+>
+    Get Your Business Online 
+    <span class="material-symbols-outlined inline-block align-middle ml-2 group-hover:translate-x-2 transition-transform">
+        bolt
+    </span>
+</a>
 </div>
 </section>
 </main>
 <!-- Footer -->
-<footer class="w-full flex flex-col items-center gap-12 py-section-gap px-margin-desktop bg-background border-t border-outline-variant/10">
-<div class="font-display-xl text-headline-lg text-on-surface reveal">ANMOL SRIVASTAVA.</div>
-<div class="flex gap-12 text-on-surface-variant font-label-sm text-label-sm reveal">
-<a class="hover:text-primary transition-all duration-300 opacity-80 hover:opacity-100" href="#">Email</a>
-<a class="hover:text-primary transition-all duration-300 opacity-80 hover:opacity-100" href="#">WhatsApp</a>
-<a class="hover:text-primary transition-all duration-300 opacity-80 hover:opacity-100" href="#">Instagram</a>
-<a class="hover:text-primary transition-all duration-300 opacity-80 hover:opacity-100" href="#">GitHub</a>
+<footer id="contact" class="w-full flex flex-col items-center py-16 md:py-section-gap px-6 md:px-margin-desktop bg-background border-t border-outline-variant/10">
+    <!-- Logo Block -->
+    <div class="flex flex-col items-center gap-1 reveal">
+        <div class="font-display-xl text-headline-lg text-on-surface text-center">
+    ANMOL SRIVASTAVA.
 </div>
-<div class="font-label-sm text-label-sm text-on-surface-variant/40 mt-12">© 2024 AESTHETE STUDIO. ALL RIGHTS RESERVED.</div>
+
+        <div class="flex items-center justify-center gap-3">
+            <div class="w-8 h-px bg-secondary/50"></div>
+
+            <span class="text-[11px] uppercase tracking-[0.35em] text-on-surface-variant/70">
+                WEB DESIGNER & DEVELOPER
+            </span>
+
+            <div class="w-8 h-px bg-secondary/50"></div>
+        </div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="flex items-center gap-10 mt-10 text-on-surface-variant font-label-sm text-label-sm reveal">
+         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=anmolsrivastava287@gmail.com"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="hover:text-primary transition-all duration-300">
+        Email
+    </a>
+    <a href="https://wa.me/919453633094"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="hover:text-primary transition-all duration-300">
+        WhatsApp
+    </a>
+    <a href="https://github.com/anmol4903/"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="hover:text-primary transition-all duration-300">
+        GitHub
+    </a>
+    
+    </div>
+
+    <!-- Copyright -->
+    <div class="font-label-sm text-label-sm text-on-surface-variant/40 mt-10">
+        © 2026 Anmol Srivastava. ALL RIGHTS RESERVED.
+    </div>
+
 </footer>
 <script>
         // Smooth Scroll Implementation (Lenis-like simple version)
@@ -594,54 +763,18 @@
             // but for this request vanilla native smooth behavior with JS is safer.
         }
 
-        // Custom Cursor trailing
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('follower');
-        let cursorX = 0, cursorY = 0;
-        let followerX = 0, followerY = 0;
-
         document.addEventListener('mousemove', (e) => {
-            cursorX = e.clientX;
-            cursorY = e.clientY;
-            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-            
-            // Hero Mouse Gradient Update
-            const heroGradient = document.getElementById('hero-gradient');
-            if (heroGradient) {
-                const rect = heroGradient.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                heroGradient.style.setProperty('--mouse-x', `${x}%`);
-                heroGradient.style.setProperty('--mouse-y', `${y}%`);
-            }
-        });
+    const heroGradient = document.getElementById('hero-gradient');
 
-        function animateFollower() {
-            followerX += (cursorX - followerX - 20) * 0.15;
-            followerY += (cursorY - followerY - 20) * 0.15;
-            follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0)`;
-            requestAnimationFrame(animateFollower);
-        }
-        animateFollower();
+    if (heroGradient) {
+        const rect = heroGradient.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        document.querySelectorAll('a, button, .hover-tilt').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                follower.style.width = '70px';
-                follower.style.height = '70px';
-                follower.style.background = 'rgba(116, 209, 255, 0.1)';
-                follower.style.borderColor = '#74d1ff';
-                cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(4)`;
-                cursor.style.opacity = '0.2';
-            });
-            el.addEventListener('mouseleave', () => {
-                follower.style.width = '40px';
-                follower.style.height = '40px';
-                follower.style.background = 'transparent';
-                follower.style.borderColor = 'rgba(116, 209, 255, 0.3)';
-                cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(1)`;
-                cursor.style.opacity = '1';
-            });
-        });
+        heroGradient.style.setProperty('--mouse-x', `${x}%`);
+        heroGradient.style.setProperty('--mouse-y', `${y}%`);
+    }
+});
 
         // 3D Tilt Effect
         document.querySelectorAll('.hover-tilt').forEach(card => {
@@ -732,6 +865,32 @@
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
+
+        // Hamburger Menu
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const mobileClose = document.getElementById('mobile-close');
+
+        function openMenu() {
+            mobileMenu.classList.add('open');
+            mobileOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        hamburgerBtn.addEventListener('click', openMenu);
+        mobileClose.addEventListener('click', closeMenu);
+        mobileOverlay.addEventListener('click', closeMenu);
+
+        // Close on nav link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
 
         // Smooth Section Anchors
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
